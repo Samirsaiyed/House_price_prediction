@@ -1,1 +1,6 @@
 Flask
+numpy
+gunicorn
+pandas
+sklearn
+-e .
