@@ -20,7 +20,7 @@ class DataIngestion:
             raise HousingException(e,sys)
 
     # Bring the data into system
-    def download_housing_data(self,)->str:
+    def download_housing_data(self)->str:
         try:
             #Extraction remote url to download dataset
             download_url = self.data_ingestion_config.dataset_download_url
@@ -40,14 +40,14 @@ class DataIngestion:
             logging.info(f"Downloading File from :[{download_url}] into  :[{tgz_file_path}]" )
             urllib.request.urlretrieve(download_url,tgz_file_path)
 
-            logging.info(f"File :[{tgz_file_path}] has been downloaded successhully." )
+            logging.info(f"File :[{tgz_file_path}] has been downloaded successully." )
 
             return tgz_file_path
 
         except Exception as e:
             raise HousingException(e,sys) from e
     
-    # Extract Data as raw
+    # Extract Data as raw data
     def extract_tgz_file(self,tgz_file_path:str):
         try:
             raw_data_dir = self.data_ingestion_config.raw_data_dir
