@@ -1,8 +1,13 @@
+
 from housing.logger import logging
 from housing.exception import HousingException
 import os,sys
 from housing.entity.config_entity import DataValidationConfig
-from housing.entity.artifact_entity import DataIngestionArtifact
+from housing.entity.artifact_entity import DataIngestionArtifact,DataValidationArtifact
+import pandas as pd
+
+
+
 
 
 class DataValidation:
@@ -15,6 +20,10 @@ class DataValidation:
         except Exception as e:
             raise HousingException(e,sys) from e
     
+    def get_train_and_test_df(self):
+        train_df = pd.read(self.data_ingestion_artifact.train_file_path)
+        test_df = pd.read(self.data_ingestion_artifact.test_file_path)
+        return train_df,test_df
 
     def is_train_test_file_exists(self) -> bool:
         try:
@@ -59,14 +68,74 @@ class DataValidation:
             raise HousingException(e,sys) from e
 
 
+    def save_data_drift_report(self):
 
-    def initiate_data_validation(self):
+        try:  
+            pass
+            '''
+            report = Report(metrics=[DataDriftPreset(), ])
+            train_df,test_df = self.get_train_and_test_df()
+            report.run(train_df,test_df)
+            report = json.loads(report.json())
+            with open(self.data_validation_config.report_file_path,"w") as report_file:
+                json.dump(report, report_file, indent=6)
+            return report
+            '''
+            
+        except Exception as e:
+            raise HousingException(e,sys) from e 
+
+
+    def save_data_drift_report_page(self):
+        try:
+            pass
+            '''
+            report = Report(metrics=[
+            ColumnSummaryMetric(column_name='AveRooms'),
+            ColumnQuantileMetric(column_name='AveRooms', quantile=0.25),
+            ColumnDriftMetric(column_name='AveRooms')
+            ])
+
+            train_df,test_df = self.get_train_and_test_df()
+
+            report.run(train_df,test_df)
+
+            report.save(self.data_validation_config.report_page_file_path)
+            '''    
+        except Exception as e:
+            raise HousingException(e,sys) from E
+
+    def is_data_drift_found(self)-> bool:
+        try:
+            pass
+            '''
+            report = self.save_data_drift_report()
+            self.save_data_drift_report_page()
+            
+            return True
+            '''
+        except Exception as e:
+            raise HousingException(e,sys) from e
+
+
+    def initiate_data_validation(self)-> DataValidationArtifact:
         try:
 
             self.is_train_test_file_exists()
 
             self.validate_dataset_schema()
 
+            self.is_data_drift_found()
+
+            data_validatiob_artifact = DataValidationArtifact(
+                schema_file_path=self.data_validation_config.schema_file_path,
+                report_file_path=self.data_validation_config.report_file_path,
+                report_page_file_path=self.data_validation_config.report_page_file_path,
+                is_validated= True,
+                message= "Data validation perform successfully."
+                
+            )
+            logging.info(f"Data validation artifact: {data_validatiob_artifact}")
 
         except Exception as e:
             raise HousingException(e,sys) from e
