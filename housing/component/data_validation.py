@@ -127,7 +127,7 @@ class DataValidation:
 
             self.is_data_drift_found()
 
-            data_validatiob_artifact = DataValidationArtifact(
+            data_validation_artifact = DataValidationArtifact(
                 schema_file_path=self.data_validation_config.schema_file_path,
                 report_file_path=self.data_validation_config.report_file_path,
                 report_page_file_path=self.data_validation_config.report_page_file_path,
@@ -135,7 +135,13 @@ class DataValidation:
                 message= "Data validation perform successfully."
                 
             )
-            logging.info(f"Data validation artifact: {data_validatiob_artifact}")
+            logging.info(f"Data validation artifact: {data_validation_artifact}")
+            return data_validation_artifact
 
         except Exception as e:
             raise HousingException(e,sys) from e
+
+
+    
+    def __del__(self):
+        logging.info(f"{'='*20}Data Ingestion log completed.{'='*20} \n\n")

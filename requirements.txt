@@ -5,4 +5,5 @@ pandas
 PyYAML
 scikit-learn
 evidently
+dill
 -e .
