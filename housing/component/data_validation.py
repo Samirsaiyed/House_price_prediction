@@ -7,9 +7,6 @@ from housing.entity.artifact_entity import DataIngestionArtifact,DataValidationA
 import pandas as pd
 
 
-
-
-
 class DataValidation:
     
     def __init__(self, data_validation_config:DataValidationConfig,
